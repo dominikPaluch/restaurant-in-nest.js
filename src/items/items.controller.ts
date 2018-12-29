@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { Item } from './item.interface';
 import { ValidationPipe } from '../common/validation.pipe';
 import { CreateItemDto } from './create-item.dto';
+import { AdminGuard } from '../common/admin.guard';
 
 @Controller('items')
 export class ItemsController {
@@ -16,6 +17,7 @@ export class ItemsController {
   }
 
   @Post()
+  @UseGuards(new AdminGuard())
   @UsePipes(new ValidationPipe())
   async create(@Body() createItemDto: CreateItemDto) {
     this.itemsService.create(createItemDto);
